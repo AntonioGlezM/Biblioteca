@@ -34,12 +34,8 @@ public class Usuario {
     }
 
     public void prestarLibro(Libro libro) {
+        prestamosActivos.add(libro);
 
-        if (prestamosActivos.size() < 3) {
-            prestamosActivos.add(libro);
-        } else {
-            System.out.println("No puede tener más de 3 libros prestados.");
-        }
     }
 
     public void devolverLibro(Libro libro) {
