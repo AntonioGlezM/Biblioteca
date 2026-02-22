@@ -31,6 +31,25 @@ public class Prestamo {
         return LocalDate.now().isAfter(fechaVencimiento) && !estaDevuelto();
     }
 
+    public boolean BloquePorDevolucion() { 
+
+        if (fechaDevolucion == null) {
+            return false; // Aquí el sistema detecta que no está devuelto
+        }
+
+        // Si el préstamo duró 30 días o más
+        if (fechaDevolucion.isAfter(fechaPrestamo.plusDays(30))
+                || fechaDevolucion.isEqual(fechaPrestamo.plusDays(30))) {
+
+            // Aqui está el tiempo de bloqueo en caso de que se hayan superado los 30 días
+            LocalDate finBloqueo = fechaDevolucion.plusDays(7);
+
+            return LocalDate.now().isBefore(finBloqueo);
+        }
+
+        return false;
+    }
+
     public Libro getLibro() {
         return libro;
     }
