@@ -1,7 +1,5 @@
 package Model;
 
-import java.time.LocalDate;
-
 public class Prestamo {
 
     private Libro libro;
