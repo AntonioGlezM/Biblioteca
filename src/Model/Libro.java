@@ -49,6 +49,10 @@ public class Libro {
         }
     }
 
+    public void reservar() {
+        this.estado = EstadoLibro.RESERVADO;
+    }
+
     public String getIsbn() {
         return isbn;
     }
