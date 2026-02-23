@@ -111,7 +111,7 @@ public class GestorBiblioteca {
         }
         return null;
     }
-    // Con este método, usamos un array list para obtener todos los libros con el mismo título, y nos devuelve el resultado de ese array.
+    // Con este método, usamos una lista para obtener todos los libros con el mismo título, y nos devuelve el resultado con todos ellos.
     public List<Libro> buscarLibrosPorTitulo(String titulo) {
         List<Libro> resultado = new ArrayList<>();
         for (Libro l : libros) {
