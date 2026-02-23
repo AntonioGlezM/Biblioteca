@@ -51,10 +51,8 @@ public class GestorBiblioteca {
 
         // Validar bloqueo de 7 días
         for (Prestamo p : prestamos) {
-
             if (p.getLibro().getIsbn().equals(isbn) &&
                     p.getUsuario().getId().equals(idUsuario)) {
-
                 if (p.BloquePorDevolucion()) {
                     throw new IllegalArgumentException(
                             "Debe esperar 7 días para volver a pedir este libro.");
@@ -86,6 +84,25 @@ public class GestorBiblioteca {
                 break;
             }
         }
+    }
+
+    // Método de reserva del libro
+    public void reservarLibro(String isbn, String idUsuario) throws LibroNoDisponibleException {
+        Libro libro = buscarLibroPorISBN(isbn);
+        Usuario usuario = buscarUsuarioPorId(idUsuario);
+
+        if (libro == null || usuario == null) {
+            throw new IllegalArgumentException("Libro o usuario no válido.");
+        }
+
+        if (libro.getEstado() != EstadoLibro.DISPONIBLE) {
+            throw new LibroNoDisponibleException("El libro no se puede reservar.");
+        }
+
+        // Cambiar estado del libro a reservado
+        libro.reservar();
+
+        System.out.println("Libro '" + libro.getTitulo() + "' reservado por " + usuario.getNombre());
     }
 
     public Libro buscarLibroPorISBN(String isbn) {
