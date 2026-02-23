@@ -37,19 +37,16 @@ public class GestorBiblioteca {
             throw new IllegalArgumentException("Libro o usuario no válido.");
         }
 
-        // Validar disponibilidad
         if (libro.getCopiasDisponibles() <= 0 ||
                 libro.getEstado() == EstadoLibro.RESERVADO) {
             throw new LibroNoDisponibleException("El libro no está disponible.");
         }
 
-        // Validar máximo 3 libros
         if (usuario.getLibrosPrestados().size() >= 3) {
             throw new LimitePrestamosExcedidoException(
                     "El usuario ya tiene 3 libros prestados.");
         }
 
-        // Validar bloqueo de 7 días
         for (Prestamo p : prestamos) {
             if (p.getLibro().getIsbn().equals(isbn) &&
                     p.getUsuario().getId().equals(idUsuario)) {
@@ -60,19 +57,15 @@ public class GestorBiblioteca {
             }
         }
 
-        // Crear préstamo
         Prestamo prestamo = new Prestamo(libro, usuario);
-
         usuario.prestarLibro(libro);
         libro.reducirCopia();
-
         prestamos.add(prestamo);
     }
 
     public void devolverLibro(String isbn, String idUsuario) {
 
         for (Prestamo p : prestamos) {
-
             if (p.getLibro().getIsbn().equals(isbn) &&
                     p.getUsuario().getId().equals(idUsuario) &&
                     !p.estaDevuelto()) {
@@ -80,13 +73,11 @@ public class GestorBiblioteca {
                 p.devolver();
                 p.getLibro().aumentarCopia();
                 p.getUsuario().devolverLibro(p.getLibro());
-
                 break;
             }
         }
     }
 
-    // Método de reserva del libro
     public void reservarLibro(String isbn, String idUsuario) throws LibroNoDisponibleException {
         Libro libro = buscarLibroPorISBN(isbn);
         Usuario usuario = buscarUsuarioPorId(idUsuario);
@@ -99,9 +90,7 @@ public class GestorBiblioteca {
             throw new LibroNoDisponibleException("El libro no se puede reservar.");
         }
 
-        // Cambiar estado del libro a reservado
         libro.reservar();
-
         System.out.println("Libro '" + libro.getTitulo() + "' reservado por " + usuario.getNombre());
     }
 
@@ -121,6 +110,37 @@ public class GestorBiblioteca {
             }
         }
         return null;
+    }
+
+    public List<Libro> buscarLibrosPorTitulo(String titulo) {
+        List<Libro> resultado = new ArrayList<>();
+        for (Libro l : libros) {
+            if (l.getTitulo().toLowerCase().contains(titulo.toLowerCase())) {
+                resultado.add(l);
+            }
+        }
+        return resultado;
+    }
+
+    // buscar libros por género, de la misma manera que con el título.
+    public List<Libro> buscarLibrosPorGenero(Genero genero) {
+        List<Libro> resultado = new ArrayList<>();
+        for (Libro l : libros) {
+            if (l.getGenero() == genero) {
+                resultado.add(l);
+            }
+        }
+        return resultado;
+    }
+
+    // Este método nos indica que usuario tiene cada libro.
+    public Usuario usuarioConLibroPrestado(String isbn) {
+        for (Prestamo p : prestamos) {
+            if (p.getLibro().getIsbn().equals(isbn) && !p.estaDevuelto()) {
+                return p.getUsuario(); // devuelve el usuario que tiene el libro
+            }
+        }
+        return null; // si nadie tiene el libro prestado
     }
 
     public void resumenLibros() {
