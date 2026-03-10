@@ -43,6 +43,10 @@ public class Usuario {
         librosPrestados.add(libro);
     }
 
+    public List<Libro> historialLibros() {
+        return getLibrosPrestados();
+    }
+
     @Override
     public String toString() {
         return "Usuario: " + nombre + " | Libros prestados: " + prestamosActivos.size();

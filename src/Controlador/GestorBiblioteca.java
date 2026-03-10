@@ -42,7 +42,7 @@ public class GestorBiblioteca {
             throw new LibroNoDisponibleException("El libro no está disponible.");
         }
 
-        if (usuario.getLibrosPrestados().size() >= 3) {
+        if (usuario.getprestamosActivos().size() >= 3) {
             throw new LimitePrestamosExcedidoException(
                     "El usuario ya tiene 3 libros prestados.");
         }
